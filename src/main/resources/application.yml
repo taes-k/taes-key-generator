@@ -1,0 +1,88 @@
+####################################################################################################
+## 공용
+####################################################################################################
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: key-generator
+  jpa:
+    database: mysql
+    generate-ddl: false
+    properties:
+      hibernate:
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+          implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    hibernate:
+      ddl-auto: none
+  datasource:
+    initialization-mode: never
+
+logging:
+  config: classpath:taes-logback.xml
+  level:
+    com.taes.key: info
+
+logback:
+  config:
+    path: /var/log/key-generator
+    filename: key-generator
+
+---
+
+####################################################################################################
+## local
+####################################################################################################
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/taes_key
+    username: root
+    password: password
+
+logback:
+  config:
+    path: ./log
+
+logging:
+  level:
+    com.taes.key: debug
+---
+
+####################################################################################################
+## junit-test
+####################################################################################################
+
+spring:
+  config:
+    activate:
+      on-profile: junit-test
+  datasource:
+    url: jdbc:mysql://localhost:13306/taes_key
+    username: root
+    password: password
+
+logging:
+  level:
+    com.taes.key: debug
+---
+
+####################################################################################################
+## live
+####################################################################################################
+
+spring:
+  config:
+    activate:
+      on-profile: live
+  datasource:
+    url: jdbc:mysql://xxxx:3306/taes_key
+    username: xxx
+    password: xxx
