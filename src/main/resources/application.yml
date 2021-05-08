@@ -32,6 +32,18 @@ logback:
     path: /var/log/key-generator
     filename: key-generator
 
+springfox:
+  documentation:
+    swagger:
+      v2:
+        use-model-v3: true
+
+# Actuator
+server.shutdown: graceful
+spring.lifecycle.timeout-per-shutdown-phase: 30s
+management.endpoint.shutdown.enable: true
+management.endpoints.web.exposure.inclue: "shutdown"
+
 ---
 
 ####################################################################################################
