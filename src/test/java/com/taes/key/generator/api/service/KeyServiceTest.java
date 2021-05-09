@@ -32,7 +32,7 @@ class KeyServiceTest extends UnitTest
         keySet.setKeyType(KeyType.STRING);
 
         KeyService keyService = new KeyService(keySetRepository);
-        Mockito.doReturn(Optional.empty()).when(keySetRepository).findById(keyId);
+        Mockito.doReturn(false).when(keySetRepository).existsByKeyId(keyId);
         Mockito.doReturn(keySet).when(keySetRepository).save(keySet);
 
         // when
@@ -54,7 +54,7 @@ class KeyServiceTest extends UnitTest
         keySet.setKeyType(KeyType.STRING);
 
         KeyService keyService = new KeyService(keySetRepository);
-        Mockito.doReturn(Optional.of(keySet)).when(keySetRepository).findById(keyId);
+        Mockito.doReturn(true).when(keySetRepository).existsByKeyId(keyId);
 
         // when
         Executable exc = () -> keyService.registKeySet(keySet);
