@@ -58,6 +58,8 @@ spring:
     url: jdbc:mysql://localhost:3306/taes_key
     username: root
     password: password
+  jpa:
+    show-sql: true
 
 logback:
   config:

@@ -15,31 +15,34 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-public class SwaggerConfig {
+public class SwaggerConfig
+{
 
     private final BuildProperties buildProperties;
 
-    public SwaggerConfig(BuildProperties buildProperties) {
+    public SwaggerConfig(BuildProperties buildProperties)
+    {
         this.buildProperties = buildProperties;
     }
 
     @Bean
-    public Docket api() {
+    public Docket api()
+    {
         return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.taes.key.generator"))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(createApiInfo());
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("com.taes.key.generator"))
+            .paths(PathSelectors.any())
+            .build()
+            .apiInfo(createApiInfo());
     }
 
     private ApiInfo createApiInfo()
     {
         return new ApiInfoBuilder()
-                .title("taes key generator")
-                .description("provide unique keys in your service")
-                .version(buildProperties.getTime().atZone(ZoneId.of("Asia/Seoul"))
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .build();
+            .title("taes key generator")
+            .description("provide unique keys in your service")
+            .version(buildProperties.getTime().atZone(ZoneId.of("Asia/Seoul"))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+            .build();
     }
 }
