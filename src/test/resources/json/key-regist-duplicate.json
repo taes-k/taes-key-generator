@@ -1,0 +1,5 @@
+{
+  "key": "duplicate-key",
+  "description": "sample을 위한 key",
+  "type": "STRING"
+}
