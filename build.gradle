@@ -32,15 +32,30 @@ dependencies {
     // others
     implementation 'org.modelmapper:modelmapper:2.3.0'
     implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'commons-io:commons-io:2.8.0'
+
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     // test
+    testImplementation "org.testcontainers:testcontainers:1.15.3"
+    testImplementation "org.testcontainers:junit-jupiter:1.15.3"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform{
+        includeTags 'UnitTest'
+        excludeTags 'IntegrationTest'
+    }
+    systemProperties System.properties
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform{
+        includeTags 'IntegrationTest'
+        excludeTags 'UnitTest'
+    }
 }

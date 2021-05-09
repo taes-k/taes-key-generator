@@ -81,7 +81,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:13306/taes_key
     username: root
-    password: password
+    password:
 
 logging:
   level:

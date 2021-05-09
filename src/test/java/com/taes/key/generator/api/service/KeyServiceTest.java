@@ -1,5 +1,6 @@
 package com.taes.key.generator.api.service;
 
+import com.taes.key.generator.UnitTest;
 import com.taes.key.generator.api.entity.KeySet;
 import com.taes.key.generator.api.enums.KeyType;
 import com.taes.key.generator.api.repository.KeySetRepository;
@@ -14,7 +15,7 @@ import org.mockito.Mockito;
 import java.util.Optional;
 
 @DisplayName("KeyService 테스트")
-class KeyServiceTest
+class KeyServiceTest extends UnitTest
 {
     @Mock
     private KeySetRepository keySetRepository = Mockito.mock(KeySetRepository.class);
