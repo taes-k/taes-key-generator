@@ -12,6 +12,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Key 통합 테스트")
@@ -26,12 +27,12 @@ public class KeyIT extends TCIntegrationTest
         @DisplayName("Key 등록 -> 성공")
         void keyRegist_success() throws Exception
         {
-            // when
+            // given
             String url = "/api/key/register";
             String requestPath = "classpath:json/key-regist-normal.json";
             String content = FileUtils.readFileToString(ResourceUtils.getFile(requestPath), StandardCharsets.UTF_8);
 
-            // then
+            // when-then
             MockHttpServletRequestBuilder rq = MockMvcRequestBuilders
                 .post(url)
                 .content(content)
@@ -45,12 +46,12 @@ public class KeyIT extends TCIntegrationTest
         @DisplayName("Key 등록 -> 실패 (중복키)")
         void keyRegist_fail_duplicate() throws Exception
         {
-            // when
+            // given
             String url = "/api/key/register";
             String requestPath = "classpath:json/key-regist-duplicate.json";
             String content = FileUtils.readFileToString(ResourceUtils.getFile(requestPath), StandardCharsets.UTF_8);
 
-            // then
+            // when-then
             MockHttpServletRequestBuilder rq = MockMvcRequestBuilders
                 .post(url)
                 .content(content)
@@ -60,5 +61,42 @@ public class KeyIT extends TCIntegrationTest
                 .andExpect(status().is5xxServerError());
         }
 
+    }
+
+    @Nested
+    @Sql("classpath:sql/generate-key-string.sql")
+    @DisplayName("Key 테스트")
+    class KeyTest extends TCIntegrationTest
+    {
+        @Test
+        @DisplayName("Key 발급 (String type) -> 성공")
+        void generateKey_stringType_success() throws Exception
+        {
+            // given
+            String url = "/api/key/string-key";
+
+            // when-then
+            MockHttpServletRequestBuilder rq = MockMvcRequestBuilders
+                .get(url);
+
+            mockMvc.perform(rq)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.value").isNotEmpty());
+        }
+
+        @Test
+        @DisplayName("Key 발급 (String type) -> 실패 (미등록키)")
+        void generateKey_stringType_fail_notFound() throws Exception
+        {
+            // given
+            String url = "/api/key/not-registered-key";
+
+            // when-then
+            MockHttpServletRequestBuilder rq = MockMvcRequestBuilders
+                .post(url);
+
+            mockMvc.perform(rq)
+                .andExpect(status().is5xxServerError());
+        }
     }
 }

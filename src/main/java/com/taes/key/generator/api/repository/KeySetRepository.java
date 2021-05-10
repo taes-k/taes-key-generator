@@ -7,5 +7,7 @@ import java.util.Optional;
 
 public interface KeySetRepository extends JpaRepository<KeySet, String>
 {
+    Optional<KeySet> findByKeyId(String keyId);
+
     boolean existsByKeyId(String keyId);
 }
