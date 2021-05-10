@@ -1,6 +1,6 @@
 package com.taes.key.generator.api.enums;
 
-public enum KeyGenerator
+public enum KeyGeneratorType
 {
     GENERIC, MYSQL;
 }

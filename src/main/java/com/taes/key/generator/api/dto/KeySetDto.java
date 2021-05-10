@@ -5,7 +5,9 @@ import com.taes.key.generator.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -29,6 +31,17 @@ public class KeySetDto
         @NotBlank
         private String type;
         private String generator;
+        @Min(1)
         private Integer minLength;
+
+        public String getType()
+        {
+            return StringUtils.upperCase(type);
+        }
+
+        public String getGenerator()
+        {
+            return StringUtils.upperCase(generator);
+        }
     }
 }
