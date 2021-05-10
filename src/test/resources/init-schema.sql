@@ -13,6 +13,12 @@ CREATE TABLE `key_set` (
     `chg_dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`key_set_seq`),
     UNIQUE KEY `key_set_UN` (`key_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `key_string` (
+    `key_set_seq` int NOT NULL,
+    `key_value` char(19) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `reg_dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
