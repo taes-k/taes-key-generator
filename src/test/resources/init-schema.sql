@@ -18,7 +18,13 @@ CREATE TABLE `key_set` (
 CREATE TABLE `key_string` (
     `key_set_seq` int NOT NULL,
     `key_value` char(19) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `reg_dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `reg_dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`key_set_seq`,`key_value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
+CREATE TABLE `key_number_mysql` (
+    `key_set_seq` int NOT NULL,
+    `key_value` bigint NOT NULL AUTO_INCREMENT,
+    `reg_dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`key_set_seq`,`key_value`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci

@@ -1,7 +1,7 @@
 package com.taes.key.generator.api.dto.validator;
 
 import com.taes.key.generator.api.dto.KeySetDto;
-import com.taes.key.generator.api.enums.KeyGenerator;
+import com.taes.key.generator.api.enums.KeyGeneratorType;
 import com.taes.key.generator.api.enums.KeyType;
 import org.apache.commons.lang3.EnumUtils;
 
@@ -14,17 +14,17 @@ public class KeyTypeConstraintValidator implements ConstraintValidator<KeyTypeCo
     public boolean isValid(KeySetDto.CreateReq value, ConstraintValidatorContext context)
     {
         KeyType keyType = EnumUtils.getEnumIgnoreCase(KeyType.class, value.getType());
-        KeyGenerator keyGenerator = EnumUtils.getEnumIgnoreCase(KeyGenerator.class, value.getGenerator());
+        KeyGeneratorType keyGeneratorType = EnumUtils.getEnumIgnoreCase(KeyGeneratorType.class, value.getGenerator());
 
         if(keyType == KeyType.STRING)
         {
-            if(keyGenerator == null || keyGenerator == KeyGenerator.GENERIC)
+            if(keyGeneratorType == null || keyGeneratorType == KeyGeneratorType.GENERIC)
                 return true;
         }
 
         if(keyType == KeyType.NUMBER)
         {
-            if(keyGenerator == KeyGenerator.GENERIC || keyGenerator == KeyGenerator.MYSQL)
+            if(keyGeneratorType == KeyGeneratorType.GENERIC || keyGeneratorType == KeyGeneratorType.MYSQL)
                 return true;
         }
 

@@ -65,9 +65,25 @@ public class KeyIT extends TCIntegrationTest
 
     @Nested
     @Sql("classpath:sql/generate-key-string.sql")
+    @Sql("classpath:sql/generate-key-number-mysql.sql")
     @DisplayName("Key 테스트")
     class KeyTest extends TCIntegrationTest
     {
+        @Test
+        @DisplayName("Key 발급 -> 실패 (미등록키)")
+        void generateKey_fail_notFound() throws Exception
+        {
+            // given
+            String url = "/api/key/not-registered-key";
+
+            // when-then
+            MockHttpServletRequestBuilder rq = MockMvcRequestBuilders
+                .post(url);
+
+            mockMvc.perform(rq)
+                .andExpect(status().is5xxServerError());
+        }
+
         @Test
         @DisplayName("Key 발급 (String type) -> 성공")
         void generateKey_stringType_success() throws Exception
@@ -85,18 +101,19 @@ public class KeyIT extends TCIntegrationTest
         }
 
         @Test
-        @DisplayName("Key 발급 (String type) -> 실패 (미등록키)")
-        void generateKey_stringType_fail_notFound() throws Exception
+        @DisplayName("Key 발급 (Number mysql type) -> 성공")
+        void generateKey_numberMySqlType_success() throws Exception
         {
             // given
-            String url = "/api/key/not-registered-key";
+            String url = "/api/key/number-mysql-key";
 
             // when-then
             MockHttpServletRequestBuilder rq = MockMvcRequestBuilders
-                .post(url);
+                .get(url);
 
             mockMvc.perform(rq)
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.value").isNotEmpty());
         }
     }
 }
