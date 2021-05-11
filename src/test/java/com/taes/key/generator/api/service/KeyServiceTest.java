@@ -3,10 +3,12 @@ package com.taes.key.generator.api.service;
 import com.taes.key.generator.UnitTest;
 import com.taes.key.generator.api.component.key.generator.KeyGeneratorFactory;
 import com.taes.key.generator.api.entity.KeySet;
+import com.taes.key.generator.api.enums.KeyGeneratorType;
 import com.taes.key.generator.api.enums.KeyType;
 import com.taes.key.generator.api.repository.KeySetRepository;
 import com.taes.key.generator.util.RandomKeyUtil;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -143,6 +145,29 @@ class KeyServiceTest extends UnitTest
 
             // then
             Assertions.assertEquals(19, StringUtils.length(result));
+        }
+
+        @Test
+        @DisplayName("발급 (Number type) -> 성공")
+        public void generateKey_numberType_success()
+        {
+            // given
+            KeySet keySet = new KeySet();
+            String keyId = RandomStringUtils.random(10, true, true);
+            keySet.setKeySetSeq(1);
+            keySet.setKeyId(keyId);
+            keySet.setDescription("test 용도 Key");
+            keySet.setKeyType(KeyType.NUMBER);
+            keySet.setKeyGenerator(KeyGeneratorType.GENERIC);
+
+            KeyService keyService = new KeyService(keySetRepository, keyGeneratorFactory);
+            Mockito.doReturn(RandomUtils.nextInt() % 100).when(keyGeneratorFactory).generateNewKey(keySet);
+
+            // when
+            int result = (int) keyService.generateNewKey(keySet);
+
+            // then
+            Assertions.assertTrue(result > 0);
         }
     }
 }
