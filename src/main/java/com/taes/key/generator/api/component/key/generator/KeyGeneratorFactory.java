@@ -10,13 +10,16 @@ public class KeyGeneratorFactory
 {
     private final KeyGenerator keyStringGenerator;
     private final KeyGenerator keyNumberMySqlGenerator;
+    private final KeyGenerator keyNumberGenericGenerator;
 
     public KeyGeneratorFactory(
         KeyStringGenerator keyStringGenerator
-        , KeyNumberMySqlGenerator keyNumberMySqlGenerator)
+        , KeyNumberMySqlGenerator keyNumberMySqlGenerator
+        , KeyNumberGenericGenerator keyNumberGenericGenerator)
     {
         this.keyStringGenerator = keyStringGenerator;
         this.keyNumberMySqlGenerator = keyNumberMySqlGenerator;
+        this.keyNumberGenericGenerator = keyNumberGenericGenerator;
     }
 
     public Object generateNewKey(KeySet keySet)
@@ -26,6 +29,10 @@ public class KeyGeneratorFactory
 
         if (keySet.getKeyType() == KeyType.NUMBER && keySet.getKeyGenerator() == KeyGeneratorType.MYSQL)
             return keyNumberMySqlGenerator.generateNewKey(keySet);
+
+        if (keySet.getKeyType() == KeyType.NUMBER && keySet.getKeyGenerator() == KeyGeneratorType.GENERIC)
+            return keyNumberGenericGenerator.generateNewKey(keySet);
+
 
         throw new IllegalArgumentException(
             String.format(

@@ -12,6 +12,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,6 +67,7 @@ public class KeyIT extends TCIntegrationTest
     @Nested
     @Sql("classpath:sql/generate-key-string.sql")
     @Sql("classpath:sql/generate-key-number-mysql.sql")
+    @Sql("classpath:sql/generate-key-number-generic.sql")
     @DisplayName("Key 테스트")
     class KeyTest extends TCIntegrationTest
     {
@@ -113,7 +115,23 @@ public class KeyIT extends TCIntegrationTest
 
             mockMvc.perform(rq)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.value").isNotEmpty());
+                .andExpect(jsonPath("$.value", greaterThan(10)));
+        }
+
+        @Test
+        @DisplayName("Key 발급 (Number generic type) -> 성공")
+        void generateKey_numberGenericType_success() throws Exception
+        {
+            // given
+            String url = "/api/key/number-generic-key";
+
+            // when-then
+            MockHttpServletRequestBuilder rq = MockMvcRequestBuilders
+                .get(url);
+
+            mockMvc.perform(rq)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.value", greaterThan(10)));
         }
     }
 }
