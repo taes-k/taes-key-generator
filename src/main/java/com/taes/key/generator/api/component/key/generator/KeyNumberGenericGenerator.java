@@ -32,23 +32,25 @@ public class KeyNumberGenericGenerator implements KeyGenerator<Long>
         this.keyNumberGenericSequenceRepository = keyNumberGenericSequenceRepository;
     }
 
-    @Retryable(value = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
+    @Retryable(value = {ObjectOptimisticLockingFailureException.class, DataIntegrityViolationException.class}, maxAttempts = 10)
     @Override
     @Transactional
-    public Long generateNewKey(KeySet keySet)
+    public synchronized Long generateNewKey(KeySet keySet)
     {
         KeyNumberGenericSequence seq =
             keyNumberGenericSequenceRepository.findById(keySet.getKeySetSeq())
-            .orElseGet(() -> {
-                KeyNumberGenericSequence newSeq = new KeyNumberGenericSequence();
-                newSeq.setKeySetSeq(keySet.getKeySetSeq());
-                newSeq.setNextVal(0L);
+                .orElseGet(() ->
+                {
+                    KeyNumberGenericSequence newSeq = new KeyNumberGenericSequence();
+                    newSeq.setKeySetSeq(keySet.getKeySetSeq());
+                    newSeq.setNextVal(0L);
 
-                return newSeq;
-            });
+                    return newSeq;
+                });
 
         seq.addNextVal();
         seq = keyNumberGenericSequenceRepository.save(seq);
+        log.debug("SEQ VAL : {}", seq.getNextVal());
 
         KeyNumberGeneric keyNumber = new KeyNumberGeneric(keySet, seq.getNextVal());
         keyNumber = keyNumberGenericRepository.save(keyNumber);
