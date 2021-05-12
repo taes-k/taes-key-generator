@@ -1,6 +1,7 @@
 package com.taes.key.generator.api.dto;
 
 import com.taes.key.generator.api.dto.validator.KeyTypeConstraint;
+import com.taes.key.generator.api.enums.KeyGeneratorType;
 import com.taes.key.generator.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class KeySetDto
         private String description;
         @NotBlank
         private String type;
-        private String generator = "GENERIC";
+        private String generator;
         @Min(1)
         private Integer minLength;
 
@@ -41,7 +42,9 @@ public class KeySetDto
 
         public String getGenerator()
         {
-            return StringUtils.upperCase(generator);
+            return StringUtils.isNoneBlank(generator)
+                ? StringUtils.upperCase(generator)
+                : KeyGeneratorType.GENERIC.name();
         }
     }
 }
