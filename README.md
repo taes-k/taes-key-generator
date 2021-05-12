@@ -98,6 +98,13 @@ GET /api/key/taes-claim-number
 - DB에서 unique 보장
 - 경쟁에서 탈락할 경우 `Retryable`을 통해 다시 키생성을 시도해 결과 얻을 수 있도록 함
 
+---
 
+### 프로젝트 룰
 
+- 작업자들간의 원활 작업과 깔끔한 git network 관리를 위해 `git-flow`를 개선한, `clean-git-flow`정책을 따릅니다. (https://taes-k.github.io/2020/01/07/clean-git-flow/)
+- 테스트코드는 `DisplayName`을 통해 테스트케이스를 명확하게 알 수 있도록 합니다.
+- 테스트코드는 `Tag`를 통해 `UnitTest`와 `IntegrationTest`를 분리합니다. (https://taes-k.github.io/2021/05/03/junit-tag/) 
+- 통합 테스트는 `Testcontainer`를 사용해 완전 독립적인 환경에서 수행 할 수 있도록 합니다. (https://taes-k.github.io/2021/05/02/spring-test-container/)
+- API 명세는 `Swagger`를 통해 전달합니다.
 

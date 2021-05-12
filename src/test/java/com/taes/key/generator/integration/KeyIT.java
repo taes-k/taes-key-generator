@@ -31,7 +31,7 @@ public class KeyIT extends TCIntegrationTest
 {
     @Nested
     @Sql("classpath:sql/regist-keyset.sql")
-    @DisplayName("Keyset 테스트")
+    @DisplayName("Keyset 등록 테스트")
     class KeysetTest extends TCIntegrationTest
     {
         @Test
@@ -78,7 +78,7 @@ public class KeyIT extends TCIntegrationTest
     @Sql("classpath:sql/generate-key-string.sql")
     @Sql("classpath:sql/generate-key-number-mysql.sql")
     @Sql("classpath:sql/generate-key-number-generic.sql")
-    @DisplayName("Key 테스트")
+    @DisplayName("Key 발급 테스트")
     class KeyTest extends TCIntegrationTest
     {
         private ObjectMapper mapper = new ObjectMapper();
@@ -214,7 +214,7 @@ public class KeyIT extends TCIntegrationTest
     @Sql("classpath:sql/generate-key-string.sql")
     @Sql("classpath:sql/generate-key-number-mysql.sql")
     @Sql("classpath:sql/generate-key-number-generic.sql")
-    @DisplayName("Key 테스트 (multithread)")
+    @DisplayName("Key 발급 테스트 (multi-thread)")
     class KeyMultiThreadTest extends TCIntegrationTest
     {
         private ObjectMapper mapper = new ObjectMapper();
