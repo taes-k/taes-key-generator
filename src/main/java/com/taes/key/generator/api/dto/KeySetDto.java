@@ -30,7 +30,7 @@ public class KeySetDto
         private String description;
         @NotBlank
         private String type;
-        private String generator;
+        private String generator = "GENERIC";
         @Min(1)
         private Integer minLength;
 

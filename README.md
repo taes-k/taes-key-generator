@@ -19,8 +19,8 @@ POST /api/key/register
 {
     "key": "taes-policy-number"
     , "description":  "taes policy key"
-    , "type": "number"
-    , "generator": "mysql"
+    , "type": "NUMBER"
+    , "generator": "MYSQL"
     , "min-length" : 10
 }
 
@@ -28,7 +28,7 @@ POST /api/key/register
 {
     "key": "taes-claim-number"
     , "description":  "taes claim key"
-    , "type": "string"
+    , "type": "STRING"
 }
 
 ```
@@ -60,5 +60,32 @@ GET /api/key/taes-claim-number
 - 스케일 아웃된 환경에서도 중복 Key 발생을 피해야함
 - 키충돌을 완벽히 피할수는 없기에, 충돌시 키를 재생성 하는 로직이 필요함
 - 동시성 환경을 고려해, 특히나 `generic` number 키 생성시 키 충돌을 최대한 피할수 있는 설계가 필요함
+- 동시성 환경을 테스트 할 수 있는 테스트 코드 구현 
+
+---
+
+### 상세 설계내용
+
+`Number type generic generator`  
+
+- `Custom-Sequence` 테이블 설계로 number-key 생성
+- 낙관적 락(`Optimisstic Lock`) 사용으로 `scale-out` 환경에서도 unique key를 생성을 보장
+- 경쟁에서 탈락할 경우 `Retryable`을 통해 다시 키생성을 시도해 결과 얻을 수 있도록 함
+- DB에서 unique를 보장하지만, 너무 많은 충돌이 발생할 경우 서비스 성능 저하가 생기기 때문에 메서드를 동기화 하여 최대한 충돌을 줄이는것이 더 효과적으로 수행됨 (scale-out 환경에서 `sticky-session` LB로 수행된다고 가정시 충돌해소에 큰 도움 될 수 있음)
+
+
+`Number type mysql generator`  
+
+- MySQL `myISAM` storage-engine 을 사용해 `Composite-key & Auto-Increment` 테이블을 통한 number-key 생성
+- `myISAM` 특성상 `page-lock`으로 처리되어 `scale-out` 환경에서도 동시성 보장
+- 경쟁에서 탈락할 경우 `Retryable`을 통해 다시 키생성을 시도해 결과 얻을 수 있도록 함
+
+`String type generator`
+
+- Random key util을 통한 무작위 String key 생성
+- DB에서 unique 보장
+- 경쟁에서 탈락할 경우 `Retryable`을 통해 다시 키생성을 시도해 결과 얻을 수 있도록 함
+
+
 
 
