@@ -60,7 +60,16 @@ GET /api/key/taes-claim-number
 - 스케일 아웃된 환경에서도 중복 Key 발생을 피해야함
 - 키충돌을 완벽히 피할수는 없기에, 충돌시 키를 재생성 하는 로직이 필요함
 - 동시성 환경을 고려해, 특히나 `generic` number 키 생성시 키 충돌을 최대한 피할수 있는 설계가 필요함
+- 외부 환경과 완전 독립적인 테스트 환경 구축
 - 동시성 환경을 테스트 할 수 있는 테스트 코드 구현 
+- key별 발급 속도를 측정 할 수 있는 `profile` aop 구축
+
+<img width="200" src="https://githubusercontent.com/taes-k/taes-key-generator/raw/main/images/key_generate_profile.png">
+
+- `Filebeat` + `ELK` 를 통한 `profile` 데이터 분석 (설계만 진행, 해당 프로젝트에는 구현되어 있지 않음)
+
+<img width="200" src="https://githubusercontent.com/taes-k/taes-key-generator/raw/main/images/profile_elk_architecture.png">
+
 
 ---
 
@@ -73,6 +82,9 @@ GET /api/key/taes-claim-number
 - 경쟁에서 탈락할 경우 `Retryable`을 통해 다시 키생성을 시도해 결과 얻을 수 있도록 함
 - DB에서 unique를 보장하지만, 너무 많은 충돌이 발생할 경우 서비스 성능 저하가 생기기 때문에 메서드를 동기화 하여 최대한 충돌을 줄이는것이 더 효과적으로 수행됨 (scale-out 환경에서 `sticky-session` LB로 수행된다고 가정시 충돌해소에 큰 도움 될 수 있음)
 
+<img width="200" src="https://githubusercontent.com/taes-k/taes-key-generator/raw/main/images/number_generic_key_without_syncronized.png">
+
+<img width="200" src="https://githubusercontent.com/taes-k/taes-key-generator/raw/main/images/number_generic_key_with_syncronized.png">
 
 `Number type mysql generator`  
 
